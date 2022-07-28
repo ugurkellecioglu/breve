@@ -1,13 +1,26 @@
-export const SaveUrl = (data) => {
-  const historicalUrls = JSON.parse(localStorage.getItem('historicalUrls')) || [];
-    return new Promise((resolve, reject) => {
-       setTimeout(() => {
-        localStorage.setItem(
-            "historicalUrls",
-            JSON.stringify([data,...historicalUrls])
-          )
-            resolve(data)
-       }, 2000);
-    });
+export const SaveUrl = async (data) => {
+  return new Promise((resolve, reject) => {
+    fetch('/api/helloworld', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(res => res)
+    .then(async (res) => {
+      const json = await res.json();
+      if(res.status === 200) {
+       resolve(json);
+      }
+      reject(new Error(res.statusText));
+    }
+    )
+    .catch(error => reject(error));
+  }
+  );
+
+
+
 }
 
