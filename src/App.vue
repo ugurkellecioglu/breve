@@ -61,8 +61,7 @@ const copyBtns = ref<any>({})
 <template>
   <div class="wrapper">
     <div class="container">
-      {{ loading ? "Loading..." : "" }}
-      <div class="row flex justify-content-center">
+      <div class="row flex justify-content-center mt-5">
         <div class="col-lg-9 col-12">
           <input
             v-model="data.givenUrl"
@@ -72,18 +71,19 @@ const copyBtns = ref<any>({})
           />
         </div>
         <div class="col-lg-1"></div>
-        <div class="col-lg-2 col-12 mt-2">
+        <div class="col-lg-2 col-12">
           <button
             @click="() => saveHash(data.givenUrl)"
-            class="block blue create-button tinify-button"
+            class="block blue create-button breve-button"
           >
-            Tinify
+            Breve It
           </button>
         </div>
       </div>
       <div class="row flex justify-content-center">
         <div class="card col-12 mt-3 border-radius-1 p-2">
           <!-- get from local storage -->
+          <h3 class="p-2">Previous Breves</h3>
           <div
             class="row flex justify-content-center align-items-center mt-2 p-2"
             v-for="historicalUrl in historicalUrls"
@@ -124,12 +124,15 @@ const copyBtns = ref<any>({})
 
 <style scoped lang="scss">
 input {
-  height: 60px;
   border-radius: 1rem;
 }
-.tinify-button {
-  height: 60px;
+.breve-button {
   border-radius: 1rem;
+  transition: all 0.3s ease-in-out;
+  &:hover {
+    background-color: #00bcd4 !important;
+    color: #fff;
+  }
 }
 
 .copy-btn {
