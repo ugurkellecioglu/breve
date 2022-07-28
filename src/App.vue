@@ -24,14 +24,12 @@ const resetData = () => {
 const loading: Ref<boolean> = ref(false)
 
 const saveHash = async (url: string) => {
-  data.hash = generateHash.value
-  data.breveUrl = `${window.location.origin}/${generateHash.value}`
+  data.hash = generateHash()
+  data.breveUrl = `${window.location.origin}/v/${generateHash()}`
   save(data)
 }
 
-const generateHash = computed<string>(() =>
-  (Math.random() + 1).toString(36).substring(7)
-)
+const generateHash = () => (Math.random() + 1).toString(36).substring(7)
 
 const historicalUrls = reactive({ data: [] as IData[] })
 
@@ -79,15 +77,15 @@ const toggleCustomize = () => {
 const dynamicHash = ref<string>("")
 const dynamicURL = ref<string>("")
 watch(dynamicHash, (newValue) => {
-  dynamicURL.value = `${window.location.origin}/${newValue}`
+  dynamicURL.value = `${window.location.origin}/v/${newValue}`
 })
 
 const saveDynamically = async (url: string) => {
-  const newHash = dynamicHash.value
+  const newHash = `${dynamicHash.value}`
   const newUrlData = {
     givenUrl: url,
     hash: newHash,
-    breveUrl: `${window.location.origin}/${newHash}`,
+    breveUrl: `${window.location.origin}/v/${newHash}`,
   }
   save(newUrlData)
 }
@@ -95,7 +93,6 @@ const save = async (data: IData) => {
   loading.value = true
   SaveUrl(data)
     .then((response: any) => {
-      console.log("resp", response)
       historicalUrls.data = [{ ...response }, ...historicalUrls.data]
     })
     .catch((err: any) => {
@@ -129,14 +126,14 @@ const error = ref<string>("")
     <div class="container">
       <div class="mt-4">
         <div>
-          <h1>Breve URL</h1>
+          <h1>Minima URL</h1>
         </div>
         <div>
           <small>Your free URL shortener. <br /></small>
         </div>
       </div>
 
-      <!-- Breve section -->
+      <!-- Minima section -->
       <div class="row flex justify-content-center mt-2">
         <div class="col-lg-9 col-12">
           <input
@@ -155,9 +152,9 @@ const error = ref<string>("")
                   ? saveDynamically(data.givenUrl)
                   : saveHash(data.givenUrl)
             "
-            class="block blue create-button breve-button"
+            class="block blue create-button minima-button"
           >
-            {{ loading ? "Breving..." : "Breve" }}
+            {{ loading ? "Miniming..." : "Minima" }}
           </button>
         </div>
       </div>
@@ -191,9 +188,9 @@ const error = ref<string>("")
         </div>
         <div class="card col-12 mt-3 border-radius-1 p-2">
           <!-- get from local storage -->
-          <h3 class="p-2">Previous Breves</h3>
+          <h3 class="p-2">Previous Minimas</h3>
           <small class="p-2" v-if="historicalUrls.data.length === 0">
-            You don't have any previous breve's
+            You don't have any previous minima's
           </small>
           <div
             class="row flex justify-content-center align-items-center mt-2 p-2"
@@ -265,7 +262,7 @@ const error = ref<string>("")
 input {
   border-radius: 1rem;
 }
-.breve-button {
+.minima-button {
   border-radius: 1rem;
   transition: all 0.3s ease-in-out;
   &:hover {
