@@ -1,18 +1,34 @@
 <script setup lang="ts">
-import { ref } from "vue"
+import { computed, reactive, ref } from "vue"
 
-const url = ref("")
+const data = reactive({
+  givenUrl: "",
+  hash: "",
+  tinyrl: "",
+})
 const loading = ref(false)
-const shortenUrl = (url) => {
+
+const saveHash = (url) => {
   loading.value = true
   setTimeout(() => {
-    const generatedShortUrl = generateShortUrl()
+    const generatedShortUrl = generateHash()
     loading.value = false
+    data.hash = generatedShortUrl
+    data.tinyrl = `${window.location.origin}/${generatedShortUrl}`
+    localStorage.setItem(
+      "historicalUrls",
+      JSON.stringify([...historicalUrls.value, data])
+    )
     return generatedShortUrl
   }, 2000)
 }
 
-const generateShortUrl = () => (Math.random() + 1).toString(36).substring(7)
+const generateHash = () => (Math.random() + 1).toString(36).substring(7)
+
+const historicalUrls = computed(() => {
+  const urls = localStorage.getItem("historicalUrls")
+  return urls ? urls : []
+})
 </script>
 
 <template>
@@ -22,23 +38,40 @@ const generateShortUrl = () => (Math.random() + 1).toString(36).substring(7)
       <div class="row flex justify-content-center">
         <div class="col-lg-8">
           <input
-            v-model="url"
+            v-model="data.givenUrl"
             type="text"
             class="create block"
-            placeholder="Enter a URL to shorten"
+            placeholder="Enter a URL to tinify"
           />
         </div>
-        <div class="col-lg-4">
+        <div class="mr-3"></div>
+        <div class="col-lg-2">
           <button
-            @click="() => shortenUrl(url)"
-            class="block green create-button"
+            @click="() => saveHash(data.givenUrl)"
+            class="block blue create-button"
           >
-            Create
+            Tinify
           </button>
+        </div>
+      </div>
+      <div class="row flex justify-content-center">
+        <div class="card">
+          <div class="card-body">
+            <!-- get from local storage -->
+          </div>
         </div>
       </div>
     </div>
   </div>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+input {
+  height: 60px;
+  border-radius: 1rem;
+}
+button {
+  height: 60px;
+  border-radius: 1rem;
+}
+</style>
