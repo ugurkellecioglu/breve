@@ -4,3 +4,8 @@
     from = "/api/*"
     to = "/.netlify/functions/:splat"
     status = 200
+[[redirects]]
+    from = "/v/*"
+    to = "/.netlify/functions/redirect"
+    status = 200
+    force = true
