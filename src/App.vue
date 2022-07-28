@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive, Ref, ref, watch } from "vue"
 import { SaveUrl } from "./services/UrlService.js"
+import { GetRandomQuote } from "./services/QuoteService.js"
 interface IData {
   givenUrl: string
   hash: string
@@ -88,17 +89,29 @@ const saveDynamically = async (url: string) => {
 
   console.log(response)
 }
+
+// quote
+interface IQuote {
+  content: string
+  author: string
+}
+const quote: IQuote = reactive({ content: "", author: "" })
+onMounted(async () => {
+  const data: IQuote = await GetRandomQuote()
+  quote.content = data.content
+  quote.author = data.author
+})
 </script>
 
 <template>
   <div class="wrapper">
     <div class="container">
-      <div class="mt-5">
+      <div class="mt-4">
         <div>
-          <h1><span class="text-primary">Breve</span> URL</h1>
+          <h1>Breve URL</h1>
         </div>
         <div>
-          <h2>Your free URL shortener. <br /></h2>
+          <small>Your free URL shortener. <br /></small>
         </div>
       </div>
 
@@ -146,13 +159,13 @@ const saveDynamically = async (url: string) => {
       </div>
 
       <!-- History -->
-      <div
-        v-if="historicalUrls.data.length > 0"
-        class="row flex justify-content-center"
-      >
+      <div class="row flex justify-content-center">
         <div class="card col-12 mt-3 border-radius-1 p-2">
           <!-- get from local storage -->
           <h3 class="p-2">Previous Breves</h3>
+          <small class="p-2" v-if="historicalUrls.data.length === 0">
+            You don't have any previous breve's
+          </small>
           <div
             class="row flex justify-content-center align-items-center mt-2 p-2"
             v-for="historicalUrl in historicalUrls.data"
@@ -183,6 +196,34 @@ const saveDynamically = async (url: string) => {
                   </button>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quote -->
+      <div
+        v-if="quote.content.length > 0"
+        class="flex row justify-content-center mt-2"
+      >
+        <div class="col-lg-12 col-12">
+          <div class="card border-radius-1 p-2">
+            <h3 class="p-2">Random Quote</h3>
+            <div
+              class="row flex justify-content-center align-items-center mt-2 p-2"
+            >
+              <div class="col-lg-12 col-md-12 flex justify-content-center">
+                <blockquote class="blockquote">
+                  <img src="../public/quote.svg" class="quote-img" />
+                  <p>
+                    {{ quote.content }} <br />
+                    <span>{{ quote.author }}</span>
+                  </p>
+                </blockquote>
+              </div>
+              <smal>
+                <a class="link" href="https://quotable.io"> Quotable.io </a>
+              </smal>
             </div>
           </div>
         </div>
@@ -219,5 +260,39 @@ input {
 .success {
   background-color: #4caf50 !important;
   color: #fff !important;
+}
+
+.blockquote {
+  padding: 60px 80px 40px;
+  position: relative;
+}
+.blockquote p {
+  font-family: "Times New Roman";
+  font-size: 35px;
+  font-weight: 700px;
+  text-align: center;
+}
+.blockquote span {
+  font-family: "Times New Roman";
+  font-size: 20px;
+  font-weight: 700px;
+  text-align: center;
+}
+
+.blockquote::after {
+  content: "";
+  top: 20px;
+  left: 50%;
+  margin-left: -100px;
+  position: absolute;
+  border-bottom: 3px solid #bf0024;
+  height: 3px;
+  width: 200px;
+}
+.quote-img {
+  width: 100px;
+  position: absolute;
+  top: 20px;
+  left: 70px;
 }
 </style>
