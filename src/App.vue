@@ -17,17 +17,16 @@ const resetData = () => {
   data.givenUrl = ""
   data.hash = ""
   data.breveUrl = ""
+  dynamicHash.value = ""
+  dynamicURL.value = ""
+  isCustomizeTrue.value = false
 }
 const loading: Ref<boolean> = ref(false)
 
 const saveHash = async (url: string) => {
   data.hash = generateHash.value
   data.breveUrl = `${window.location.origin}/${generateHash.value}`
-  loading.value = true
-  const response = await SaveUrl(data)
-  loading.value = false
-  historicalUrls.data = [{ ...response }, ...historicalUrls.data]
-  resetData()
+  save(data)
 }
 
 const generateHash = computed<string>(() =>
@@ -85,21 +84,31 @@ watch(dynamicHash, (newValue) => {
 
 const saveDynamically = async (url: string) => {
   const newHash = dynamicHash.value
-  const newUrl = dynamicURL.value
   const newUrlData = {
     givenUrl: url,
     hash: newHash,
     breveUrl: `${window.location.origin}/${newHash}`,
   }
-  loading.value = true
-  const response = await SaveUrl(newUrlData)
-  loading.value = false
-  resetData()
-  historicalUrls.data.unshift(response)
-
-  console.log(response)
+  save(newUrlData)
 }
-
+const save = async (data: IData) => {
+  loading.value = true
+  SaveUrl(data)
+    .then((response: any) => {
+      console.log("resp", response)
+      historicalUrls.data = [{ ...response }, ...historicalUrls.data]
+    })
+    .catch((err: any) => {
+      error.value = err
+    })
+    .finally(() => {
+      loading.value = false
+      resetData()
+      setTimeout(() => {
+        error.value = ""
+      }, 1500)
+    })
+}
 // quote
 interface IQuote {
   content: string
@@ -111,6 +120,8 @@ onMounted(async () => {
   quote.content = data.content
   quote.author = data.author
 })
+
+const error = ref<string>("")
 </script>
 
 <template>
@@ -152,7 +163,12 @@ onMounted(async () => {
       </div>
       <!-- ask customize  -->
       <div class="row flex mt-2 align-items-center">
-        <input :onchange="toggleCustomize" type="checkbox" id="customize" />
+        <input
+          :onchange="toggleCustomize"
+          :checked="isCustomizeTrue"
+          type="checkbox"
+          id="customize"
+        />
         <label for="customize" class="ml-2">Customize for Free!</label>
         <div v-if="isCustomizeTrue" class="col-6 ml-2">
           <input
@@ -170,6 +186,9 @@ onMounted(async () => {
 
       <!-- History -->
       <div class="row flex justify-content-center">
+        <div class="error" v-if="error">
+          {{ error }}
+        </div>
         <div class="card col-12 mt-3 border-radius-1 p-2">
           <!-- get from local storage -->
           <h3 class="p-2">Previous Breves</h3>
@@ -231,9 +250,9 @@ onMounted(async () => {
                   </p>
                 </blockquote>
               </div>
-              <smal>
+              <small>
                 <a class="link" href="https://quotable.io"> Quotable.io </a>
-              </smal>
+              </small>
             </div>
           </div>
         </div>
