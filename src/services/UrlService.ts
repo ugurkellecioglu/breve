@@ -1,6 +1,11 @@
-export const SaveUrl = async (data) => {
+interface IData {
+  givenUrl: string
+  hash: string
+  breveUrl: string
+}
+export const SaveUrl = async (data: IData) => {
   return new Promise((resolve, reject) => {
-    fetch('/api/helloworld', {
+    fetch('/api/url', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
