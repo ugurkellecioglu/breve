@@ -127,7 +127,7 @@ const error = ref<string>("")
     <div class="container">
       <div class="mt-4">
         <div>
-          <h1>Minik URL</h1>
+          <h1>Minik</h1>
         </div>
         <div>
           <small>Your free URL shortener. <br /></small>
@@ -141,7 +141,7 @@ const error = ref<string>("")
             v-model="data.givenUrl"
             type="text"
             class="create block"
-            placeholder="Enter a URL to tinify"
+            placeholder="Enter a URL to make it minik"
           />
         </div>
         <div class="col-lg-1"></div>
@@ -153,7 +153,7 @@ const error = ref<string>("")
                   ? saveDynamically(data.givenUrl)
                   : saveHash(data.givenUrl)
             "
-            class="block blue create-button minik-button"
+            class="block blue create-button minik-button mt-2 mt-lg-0"
           >
             {{ loading ? "Miniking..." : "Minik" }}
           </button>
@@ -161,21 +161,25 @@ const error = ref<string>("")
       </div>
       <!-- ask customize  -->
       <div class="row flex mt-2 align-items-center">
-        <input
-          :onchange="toggleCustomize"
-          :checked="isCustomizeTrue"
-          type="checkbox"
-          id="customize"
-        />
-        <label for="customize" class="ml-2">Customize for Free!</label>
-        <div v-if="isCustomizeTrue" class="col-6 ml-2">
+        <div class="col-5">
+          <input
+            :onchange="toggleCustomize"
+            :checked="isCustomizeTrue"
+            type="checkbox"
+            id="customize"
+          />
+          <label for="customize" class="ml-2">Customize for free!</label>
+        </div>
+        <div v-if="isCustomizeTrue" class="col-7">
           <input
             v-model="dynamicHash"
             type="text"
             class="create block pb-2"
-            placeholder="Enter a custom word"
+            placeholder="Enter a word to make the url minik"
           />
-          <small v-if="dynamicHash.length > 0"
+        </div>
+        <div class="flex justify-content-end w-100 mt-1">
+          <small class="text-right" v-if="dynamicHash.length > 0"
             >Your URL will be
             <a class="link" href="#">{{ dynamicURL }}</a></small
           >
@@ -194,36 +198,40 @@ const error = ref<string>("")
             You don't have any previous minik's
           </small>
           <div
-            class="row flex justify-content-center align-items-center mt-2 p-2"
             v-for="historicalUrl in historicalUrls.data"
             :key="historicalUrl.hash"
           >
-            <div class="col-lg-6 col-md-12 flex justify-content-start">
-              <p>{{ historicalUrl.givenUrl }}</p>
-            </div>
-            <div class="col-lg-6 col-md-12">
-              <div class="row flex align-items-center">
-                <div class="col-lg-9 col-md-12 col-12">
-                  <p class="text-right mr-4">
-                    <a
-                      class="link"
-                      :href="historicalUrl.breveUrl"
-                      target="_blank"
-                      >{{ historicalUrl.breveUrl }}</a
+            <div
+              class="row flex justify-content-center align-items-center mt-2 p-2"
+            >
+              <div class="col-lg-6 col-md-12 flex justify-content-start">
+                <p>{{ historicalUrl.givenUrl }}</p>
+              </div>
+              <div class="col-lg-6 col-md-12">
+                <div class="row flex align-items-center">
+                  <div class="col-lg-9 col-md-12 col-12">
+                    <p class="text-right mr-4">
+                      <a
+                        class="link"
+                        :href="historicalUrl.breveUrl"
+                        target="_blank"
+                        >{{ historicalUrl.breveUrl }}</a
+                      >
+                    </p>
+                  </div>
+                  <div class="col-lg-3 col-md-12 col-12">
+                    <button
+                      v-on:click="() => copy(historicalUrl)"
+                      class="light text-dark block create-button copy-btn"
+                      :ref="(el) => (copyBtns[historicalUrl.hash] = el)"
                     >
-                  </p>
-                </div>
-                <div class="col-lg-3 col-md-12 col-12">
-                  <button
-                    v-on:click="() => copy(historicalUrl)"
-                    class="light text-dark block create-button copy-btn"
-                    :ref="(el) => (copyBtns[historicalUrl.hash] = el)"
-                  >
-                    Copy
-                  </button>
+                      Copy
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
+            <hr />
           </div>
         </div>
       </div>
@@ -251,6 +259,37 @@ const error = ref<string>("")
               <small>
                 <a class="link" href="https://quotable.io"> Quotable.io </a>
               </small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="row flex justify-content-center mt-2">
+        <div class="col-lg-12 col-12">
+          <div class="card border-radius-1 p-2">
+            <h3 class="p-2">About</h3>
+            <div class="row flex justify-content-center align-items-center p-2">
+              <div class="col-lg-12 col-md-12 flex">
+                <p>
+                  Minik is a free URL shortener. It's a simple and easy way to
+                  shorten your URLs.<br />Minik is open source and you can find
+                  the source code on
+                  <a
+                    class="link"
+                    href="https://github.com/ugurkellecioglu/minik"
+                  >
+                    GitHub </a
+                  >.<br />
+                  Minik is a project by
+                  <a class="link" href="https://ugurkellecioglu.me">
+                    Ugur Kellecioglu
+                  </a>
+                  and is licensed under the MIT license.
+                  <br />
+                  Made with ❤️ in Ankara, Turkey.
+                </p>
+              </div>
             </div>
           </div>
         </div>
