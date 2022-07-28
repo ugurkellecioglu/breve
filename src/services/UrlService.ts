@@ -16,6 +16,9 @@ export const SaveUrl = async (data: IData) => {
     .then(async (res) => {
       const json = await res.json();
       if(res.status === 200) {
+      const historicalUrls = JSON.parse(localStorage.getItem('historicalUrls') || '[]');
+      const newHistoricalUrls = [json, ...historicalUrls];
+      localStorage.setItem('historicalUrls', JSON.stringify(newHistoricalUrls));
        resolve(json);
       }
       reject(new Error(res.statusText));

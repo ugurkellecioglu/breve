@@ -240,7 +240,7 @@ const error = ref<string>("")
             >
               <div class="col-lg-12 col-md-12 flex justify-content-center">
                 <blockquote class="blockquote">
-                  <img src="../public/quote.svg" class="quote-img" />
+                  <img src="/quote.svg" class="quote-img" />
                   <p>
                     {{ quote.content }} <br />
                     <span>{{ quote.author }}</span>
