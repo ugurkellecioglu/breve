@@ -13,14 +13,19 @@ const data: IData = reactive({
   hash: "",
   breveUrl: "",
 })
+const resetData = () => {
+  data.givenUrl = ""
+  data.hash = ""
+  data.breveUrl = ""
+}
 const loading: Ref<boolean> = ref(false)
 
 const saveHash = async (url: string) => {
   data.hash = generateHash.value
   data.breveUrl = `${window.location.origin}/${generateHash.value}`
   const response = await SaveUrl(data)
-  historicalUrls.data.unshift(response)
-  console.log(response)
+  historicalUrls.data = [{ ...response }, ...historicalUrls.data]
+  resetData()
 }
 
 const generateHash = computed<string>(() =>
@@ -85,6 +90,7 @@ const saveDynamically = async (url: string) => {
     breveUrl: `${window.location.origin}/${newHash}`,
   }
   const response = await SaveUrl(newUrlData)
+  resetData()
   historicalUrls.data.unshift(response)
 
   console.log(response)

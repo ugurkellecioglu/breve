@@ -4,7 +4,7 @@ export const SaveUrl = (data) => {
        setTimeout(() => {
         localStorage.setItem(
             "historicalUrls",
-            JSON.stringify([...historicalUrls, data])
+            JSON.stringify([data,...historicalUrls])
           )
             resolve(data)
        }, 2000);
