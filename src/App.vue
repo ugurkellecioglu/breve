@@ -24,8 +24,9 @@ const resetData = () => {
 const loading: Ref<boolean> = ref(false)
 
 const saveHash = async (url: string) => {
-  data.hash = generateHash()
-  data.breveUrl = `${window.location.origin}/v/${generateHash()}`
+  const hash = generateHash()
+  data.hash = hash
+  data.breveUrl = `${window.location.origin}/v/${hash}`
   save(data)
 }
 
