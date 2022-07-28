@@ -23,7 +23,9 @@ const loading: Ref<boolean> = ref(false)
 const saveHash = async (url: string) => {
   data.hash = generateHash.value
   data.breveUrl = `${window.location.origin}/${generateHash.value}`
+  loading.value = true
   const response = await SaveUrl(data)
+  loading.value = false
   historicalUrls.data = [{ ...response }, ...historicalUrls.data]
   resetData()
 }
@@ -89,7 +91,9 @@ const saveDynamically = async (url: string) => {
     hash: newHash,
     breveUrl: `${window.location.origin}/${newHash}`,
   }
+  loading.value = true
   const response = await SaveUrl(newUrlData)
+  loading.value = false
   resetData()
   historicalUrls.data.unshift(response)
 
@@ -142,7 +146,7 @@ onMounted(async () => {
             "
             class="block blue create-button breve-button"
           >
-            Breve It
+            {{ loading ? "Breving..." : "Breve" }}
           </button>
         </div>
       </div>
