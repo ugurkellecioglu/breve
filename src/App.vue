@@ -93,8 +93,17 @@ const saveDynamically = async (url: string) => {
 <template>
   <div class="wrapper">
     <div class="container">
+      <div class="mt-5">
+        <div>
+          <h1><span class="text-primary">Breve</span> URL</h1>
+        </div>
+        <div>
+          <h2>Your free URL shortener. <br /></h2>
+        </div>
+      </div>
+
       <!-- Breve section -->
-      <div class="row flex justify-content-center mt-5">
+      <div class="row flex justify-content-center mt-2">
         <div class="col-lg-9 col-12">
           <input
             v-model="data.givenUrl"
