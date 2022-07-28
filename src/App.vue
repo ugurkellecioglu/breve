@@ -1,42 +1,41 @@
 <script setup lang="ts">
-import { computed, reactive, Ref, ref, watch } from "vue"
-
+import { computed, onMounted, reactive, Ref, ref, watch } from "vue"
+import { SaveUrl } from "./services/UrlService.js"
 interface IData {
-  givenUrl: String
-  hash: String
-  tinyrl: String
+  givenUrl: string
+  hash: string
+  breveUrl: string
 }
 
 const data: IData = reactive({
   givenUrl: "",
   hash: "",
-  tinyrl: "",
+  breveUrl: "",
 })
 const loading: Ref<boolean> = ref(false)
 
-const saveHash = (url: String) => {
-  loading.value = true
-  setTimeout(() => {
-    const generatedShortUrl = generateHash.value
-    loading.value = false
-    data.hash = generatedShortUrl
-    data.tinyrl = `${window.location.origin}/${generatedShortUrl}`
-    localStorage.setItem(
-      "historicalUrls",
-      JSON.stringify([...historicalUrls.value, data])
-    )
-    return generatedShortUrl
-  }, 2000)
+const saveHash = async (url: string) => {
+  data.hash = generateHash.value
+  data.breveUrl = `${window.location.origin}/${generateHash.value}`
+  const response = await SaveUrl(data)
+  historicalUrls.data.unshift(response)
+  console.log(response)
 }
 
-const generateHash = computed<String>(() =>
+const generateHash = computed<string>(() =>
   (Math.random() + 1).toString(36).substring(7)
 )
-const historicalUrls = computed<any>(() => {
-  const urls = localStorage.getItem("historicalUrls")
-  return urls ? JSON.parse(urls) : []
+
+const historicalUrls = reactive({ data: [] as IData[] })
+
+onMounted(async () => {
+  historicalUrls.data = [
+    ...historicalUrls.data,
+    ...JSON.parse(localStorage.getItem("historicalUrls") || "[]"),
+  ]
 })
 
+// copy
 const copyToClipboard = (url: string) => {
   const el = document.createElement("textarea")
   el.value = url
@@ -46,8 +45,8 @@ const copyToClipboard = (url: string) => {
   document.body.removeChild(el)
 }
 const copy = (historicalUrl: IData) => {
-  copyToClipboard(historicalUrl.tinyrl.toString())
-  const btn = copyBtns.value[historicalUrl.hash.toString()]
+  copyToClipboard(historicalUrl.breveUrl)
+  const btn = copyBtns.value[historicalUrl.hash]
   btn.classList.add("success")
   btn.innerText = "Copied!"
   setTimeout(() => {
@@ -56,6 +55,7 @@ const copy = (historicalUrl: IData) => {
   }, 2000)
 }
 const copyBtns = ref<any>({})
+// copy end
 
 // customize
 const isCustomizeTrue = ref<boolean>(false)
@@ -74,6 +74,20 @@ const dynamicURL = ref<string>("")
 watch(dynamicHash, (newValue) => {
   dynamicURL.value = `${window.location.origin}/${newValue}`
 })
+
+const saveDynamically = async (url: string) => {
+  const newHash = dynamicHash.value
+  const newUrl = dynamicURL.value
+  const newUrlData = {
+    givenUrl: url,
+    hash: newHash,
+    breveUrl: `${window.location.origin}/${newHash}`,
+  }
+  const response = await SaveUrl(newUrlData)
+  historicalUrls.data.unshift(response)
+
+  console.log(response)
+}
 </script>
 
 <template>
@@ -92,7 +106,12 @@ watch(dynamicHash, (newValue) => {
         <div class="col-lg-1"></div>
         <div class="col-lg-2 col-12">
           <button
-            @click="() => saveHash(data.givenUrl)"
+            @click="
+              () =>
+                isCustomizeTrue
+                  ? saveDynamically(data.givenUrl)
+                  : saveHash(data.givenUrl)
+            "
             class="block blue create-button breve-button"
           >
             Breve It
@@ -119,7 +138,7 @@ watch(dynamicHash, (newValue) => {
 
       <!-- History -->
       <div
-        v-if="historicalUrls.length > 0"
+        v-if="historicalUrls.data.length > 0"
         class="row flex justify-content-center"
       >
         <div class="card col-12 mt-3 border-radius-1 p-2">
@@ -127,7 +146,7 @@ watch(dynamicHash, (newValue) => {
           <h3 class="p-2">Previous Breves</h3>
           <div
             class="row flex justify-content-center align-items-center mt-2 p-2"
-            v-for="historicalUrl in historicalUrls"
+            v-for="historicalUrl in historicalUrls.data"
             :key="historicalUrl.hash"
           >
             <div class="col-lg-6 col-md-12 flex justify-content-start">
@@ -139,9 +158,9 @@ watch(dynamicHash, (newValue) => {
                   <p class="text-right mr-4">
                     <a
                       class="link"
-                      :href="historicalUrl.tinyrl"
+                      :href="historicalUrl.breveUrl"
                       target="_blank"
-                      >{{ historicalUrl.tinyrl }}</a
+                      >{{ historicalUrl.breveUrl }}</a
                     >
                   </p>
                 </div>
