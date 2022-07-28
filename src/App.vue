@@ -126,14 +126,14 @@ const error = ref<string>("")
     <div class="container">
       <div class="mt-4">
         <div>
-          <h1>Mini URL</h1>
+          <h1>Minik URL</h1>
         </div>
         <div>
           <small>Your free URL shortener. <br /></small>
         </div>
       </div>
 
-      <!-- Mini section -->
+      <!-- Minik section -->
       <div class="row flex justify-content-center mt-2">
         <div class="col-lg-9 col-12">
           <input
@@ -152,9 +152,9 @@ const error = ref<string>("")
                   ? saveDynamically(data.givenUrl)
                   : saveHash(data.givenUrl)
             "
-            class="block blue create-button mini-button"
+            class="block blue create-button minik-button"
           >
-            {{ loading ? "Miniming..." : "Mini" }}
+            {{ loading ? "Miniking..." : "Minik" }}
           </button>
         </div>
       </div>
@@ -188,9 +188,9 @@ const error = ref<string>("")
         </div>
         <div class="card col-12 mt-3 border-radius-1 p-2">
           <!-- get from local storage -->
-          <h3 class="p-2">Previous Minis</h3>
+          <h3 class="p-2">Previous Miniks</h3>
           <small class="p-2" v-if="historicalUrls.data.length === 0">
-            You don't have any previous mini's
+            You don't have any previous minik's
           </small>
           <div
             class="row flex justify-content-center align-items-center mt-2 p-2"
@@ -262,7 +262,7 @@ const error = ref<string>("")
 input {
   border-radius: 1rem;
 }
-.mini-button {
+.minik-button {
   border-radius: 1rem;
   transition: all 0.3s ease-in-out;
   &:hover {
