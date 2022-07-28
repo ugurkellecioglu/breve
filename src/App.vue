@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, reactive, Ref, ref } from "vue"
+import { computed, reactive, Ref, ref, watch } from "vue"
 
 interface IData {
   givenUrl: String
@@ -56,11 +56,30 @@ const copy = (historicalUrl: IData) => {
   }, 2000)
 }
 const copyBtns = ref<any>({})
+
+// customize
+const isCustomizeTrue = ref<boolean>(false)
+watch(isCustomizeTrue, (val) => {
+  if (!val) {
+    dynamicHash.value = ""
+    dynamicURL.value = ""
+  }
+})
+
+const toggleCustomize = () => {
+  isCustomizeTrue.value = !isCustomizeTrue.value
+}
+const dynamicHash = ref<string>("")
+const dynamicURL = ref<string>("")
+watch(dynamicHash, (newValue) => {
+  dynamicURL.value = `${window.location.origin}/${newValue}`
+})
 </script>
 
 <template>
   <div class="wrapper">
     <div class="container">
+      <!-- Breve section -->
       <div class="row flex justify-content-center mt-5">
         <div class="col-lg-9 col-12">
           <input
@@ -80,7 +99,29 @@ const copyBtns = ref<any>({})
           </button>
         </div>
       </div>
-      <div class="row flex justify-content-center">
+      <!-- ask customize  -->
+      <div class="row flex mt-2 align-items-center">
+        <input :onchange="toggleCustomize" type="checkbox" id="customize" />
+        <label for="customize" class="ml-2">Customize for Free!</label>
+        <div v-if="isCustomizeTrue" class="col-6 ml-2">
+          <input
+            v-model="dynamicHash"
+            type="text"
+            class="create block pb-2"
+            placeholder="Enter a custom word"
+          />
+          <small v-if="dynamicHash.length > 0"
+            >Your URL will be
+            <a class="link" href="#">{{ dynamicURL }}</a></small
+          >
+        </div>
+      </div>
+
+      <!-- History -->
+      <div
+        v-if="historicalUrls.length > 0"
+        class="row flex justify-content-center"
+      >
         <div class="card col-12 mt-3 border-radius-1 p-2">
           <!-- get from local storage -->
           <h3 class="p-2">Previous Breves</h3>
