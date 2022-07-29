@@ -2263,3 +2263,16 @@ input[type="text"]:focus {
     margin-left: auto !important;
   }
 }
+
+.text-right {
+  text-align: right !important;
+}
+
+@media (max-width: 576px) {
+  .justify-content-start-sm {
+    justify-content: flex-start !important;
+  }
+  .text-left-sm {
+    text-align: left !important;
+  }
+}

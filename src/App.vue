@@ -202,15 +202,16 @@ const error = ref<string>("")
             :key="historicalUrl.hash"
           >
             <div
-              class="row flex justify-content-center align-items-center mt-2 p-2"
+              class="row flex justify-content-center justify-content-start-sm align-items-center p-2"
             >
-              <div class="col-lg-6 col-md-12 flex justify-content-start">
+              <div class="col-lg-4 col-md-12 flex justify-content-start">
                 <p>{{ historicalUrl.givenUrl }}</p>
               </div>
-              <div class="col-lg-6 col-md-12">
+              <div class="col-lg-2"></div>
+              <div class="col-lg-6 col-md-12 col-12 mt-2 mt-sm-0">
                 <div class="row flex align-items-center">
-                  <div class="col-lg-9 col-md-12 col-12">
-                    <p class="text-right mr-4">
+                  <div class="col-lg-8 col-md-12 col-12">
+                    <p class="text-right text-left-sm mr-lg-4">
                       <a
                         class="link"
                         :href="historicalUrl.breveUrl"
@@ -219,7 +220,7 @@ const error = ref<string>("")
                       >
                     </p>
                   </div>
-                  <div class="col-lg-3 col-md-12 col-12">
+                  <div class="col-lg-4 col-md-12 col-12">
                     <button
                       v-on:click="() => copy(historicalUrl)"
                       class="light text-dark block create-button copy-btn"
