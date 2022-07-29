@@ -8,6 +8,7 @@ import Footer from "./components/Footer.vue"
 import RecordList from "./components/RecordList.vue"
 import SuccessfulRecord from "./components/SuccessfulRecord.vue"
 import Customize from "./components/Customize.vue"
+import Hero from "./components/Hero.vue"
 interface IData {
   givenUrl: string
   hash: string
@@ -106,14 +107,7 @@ const error = ref<string>("")
 <template>
   <div class="wrapper">
     <div class="container">
-      <div class="mt-4">
-        <div>
-          <h1>Minik</h1>
-        </div>
-        <div>
-          <small>Your free URL shortener. <br /></small>
-        </div>
-      </div>
+      <Hero />
 
       <!-- Minik section -->
       <div class="row flex justify-content-center mt-2">
