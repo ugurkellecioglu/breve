@@ -2,8 +2,7 @@
   <div class="row flex justify-content-center mt-2">
     <div class="col-lg-9 col-12">
       <input
-        v-model="givenUrl"
-        @input="$emit('update:givenUrl', $event!.target!.value)"
+        v-model="url"
         type="text"
         class="create block"
         placeholder="Enter a URL to make it minik"
@@ -27,12 +26,23 @@
 </template>
 
 <script setup lang="ts">
-defineProps<{
+import { computed } from "vue"
+
+const props = defineProps<{
   givenUrl: string
   loading: boolean
   isCustomizeTrue: boolean
 }>()
-defineEmits(["update:givenUrl", "saveDynamically", "saveHash"])
+const emit = defineEmits(["update:givenUrl", "saveDynamically", "saveHash"])
+
+const url = computed({
+  get() {
+    return props.givenUrl
+  },
+  set(value) {
+    emit("update:givenUrl", value)
+  },
+})
 </script>
 
 <style lang="scss" scoped>

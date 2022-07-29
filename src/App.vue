@@ -8,8 +8,8 @@ import Footer from "./components/Footer.vue"
 import RecordList from "./components/RecordList.vue"
 import SuccessfulRecord from "./components/SuccessfulRecord.vue"
 import Customize from "./components/Customize.vue"
-import Hero from "./components/Hero.vue"
 import ShortenUrl from "./components/ShortenUrl.vue"
+import Hero from "./components/Hero.vue"
 interface IData {
   givenUrl: string
   hash: string
