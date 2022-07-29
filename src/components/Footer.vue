@@ -19,7 +19,12 @@
               </a>
               and is licensed under the MIT license.
               <br />
-              Made with ❤️ in Ankara, Turkey.
+              Made with ❤️ in Ankara, Turkey. This site is powered by<a
+                class="link"
+                href="https://www.netlify.com"
+              >
+                Netlify
+              </a>
             </p>
           </div>
         </div>
