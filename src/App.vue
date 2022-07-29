@@ -161,7 +161,7 @@ const error = ref<string>("")
       </div>
       <!-- ask customize  -->
       <div class="row flex mt-2 align-items-center">
-        <div class="col-5">
+        <div class="col-lg-5">
           <input
             :onchange="toggleCustomize"
             :checked="isCustomizeTrue"
@@ -170,7 +170,7 @@ const error = ref<string>("")
           />
           <label for="customize" class="ml-2">Customize for free!</label>
         </div>
-        <div v-if="isCustomizeTrue" class="col-7">
+        <div v-if="isCustomizeTrue" class="col-12 col-lg-7">
           <input
             v-model="dynamicHash"
             type="text"
@@ -331,34 +331,41 @@ input {
 .blockquote {
   padding: 60px 80px 40px;
   position: relative;
-}
-.blockquote p {
-  font-family: "Times New Roman";
-  font-size: 35px;
-  font-weight: 700px;
-  text-align: center;
-}
-.blockquote span {
-  font-family: "Times New Roman";
-  font-size: 20px;
-  font-weight: 700px;
-  text-align: center;
-}
-
-.blockquote::after {
-  content: "";
-  top: 20px;
-  left: 50%;
-  margin-left: -100px;
-  position: absolute;
-  border-bottom: 3px solid #bf0024;
-  height: 3px;
-  width: 200px;
-}
-.quote-img {
-  width: 100px;
-  position: absolute;
-  top: 20px;
-  left: 70px;
+  & > p {
+    font-family: "Times New Roman";
+    font-size: 35px;
+    font-weight: 700px;
+    text-align: center;
+  }
+  & span {
+    font-family: "Times New Roman";
+    font-size: 20px;
+    text-align: center;
+  }
+  &::after {
+    content: "";
+    top: 20px;
+    left: 50%;
+    margin-left: -100px;
+    position: absolute;
+    border-bottom: 3px solid #bf0024;
+    height: 3px;
+    width: 200px;
+  }
+  & > .quote-img {
+    width: 100px;
+    position: absolute;
+    top: 20px;
+    left: 70px;
+  }
+  @media (max-width: 768px) {
+    padding: 0;
+    &::after {
+      top: -5px;
+    }
+    & > .quote-img {
+      display: none;
+    }
+  }
 }
 </style>
