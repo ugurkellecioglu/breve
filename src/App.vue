@@ -9,6 +9,7 @@ import RecordList from "./components/RecordList.vue"
 import SuccessfulRecord from "./components/SuccessfulRecord.vue"
 import Customize from "./components/Customize.vue"
 import Hero from "./components/Hero.vue"
+import ShortenUrl from "./components/ShortenUrl.vue"
 interface IData {
   givenUrl: string
   hash: string
@@ -107,30 +108,13 @@ const error = ref<string>("")
       <Hero />
 
       <!-- Minik section -->
-      <div class="row flex justify-content-center mt-2">
-        <div class="col-lg-9 col-12">
-          <input
-            v-model="data.givenUrl"
-            type="text"
-            class="create block"
-            placeholder="Enter a URL to make it minik"
-          />
-        </div>
-        <div class="col-lg-1"></div>
-        <div class="col-lg-2 col-12">
-          <button
-            @click="
-              () =>
-                isCustomizeTrue
-                  ? saveDynamically(data.givenUrl)
-                  : saveHash(data.givenUrl)
-            "
-            class="block blue create-button minik-button mt-2 mt-lg-0"
-          >
-            {{ loading ? "Miniking..." : "Minik" }}
-          </button>
-        </div>
-      </div>
+      <ShortenUrl
+        v-model:given-url="data.givenUrl"
+        :loading="loading"
+        :is-customize-true="isCustomizeTrue"
+        @save-dynamically="saveDynamically"
+        @save-hash="saveHash"
+      />
       <!-- ask customize  -->
       <Customize
         v-model:is-customize-true="isCustomizeTrue"
@@ -138,7 +122,7 @@ const error = ref<string>("")
         v-model:dynamic-url="dynamicUrl"
       />
       <!-- successful minik -->
-      <SuccessfulRecord :successful-save="successfulSave" />
+      <SuccessfulRecord v-model:successful-save="successfulSave" />
 
       <!-- old records -->
       <RecordList :historical-urls="historicalUrls" :error="error" />
@@ -150,16 +134,4 @@ const error = ref<string>("")
   </div>
 </template>
 
-<style scoped lang="scss">
-input {
-  border-radius: 1rem;
-}
-.minik-button {
-  border-radius: 1rem;
-  transition: all 0.3s ease-in-out;
-  &:hover {
-    background-color: #00bcd4 !important;
-    color: #fff;
-  }
-}
-</style>
+<style scoped lang="scss"></style>

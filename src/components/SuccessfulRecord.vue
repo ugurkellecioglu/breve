@@ -15,6 +15,7 @@
 </template>
 
 <script setup lang="ts">
+import Record from "./Record.vue"
 interface IHistoricalUrl {
   givenUrl: string
   hash: string
