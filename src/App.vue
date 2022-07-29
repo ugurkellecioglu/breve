@@ -25,7 +25,7 @@ const resetData = () => {
   data.hash = ""
   data.breveUrl = ""
   dynamicHash.value = ""
-  dynamicURL.value = ""
+  dynamicUrl.value = ""
   isCustomizeTrue.value = false
 }
 const loading: Ref<boolean> = ref(false)
@@ -53,17 +53,14 @@ const isCustomizeTrue = ref<boolean>(false)
 watch(isCustomizeTrue, (val) => {
   if (!val) {
     dynamicHash.value = ""
-    dynamicURL.value = ""
+    dynamicUrl.value = ""
   }
 })
 
-const toggleCustomize = () => {
-  isCustomizeTrue.value = !isCustomizeTrue.value
-}
 const dynamicHash = ref<string>("")
-const dynamicURL = ref<string>("")
+const dynamicUrl = ref<string>("")
 watch(dynamicHash, (newValue) => {
-  dynamicURL.value = `${window.location.origin}/v/${newValue}`
+  dynamicUrl.value = `${window.location.origin}/v/${newValue}`
 })
 
 const saveDynamically = async (url: string) => {
@@ -135,7 +132,11 @@ const error = ref<string>("")
         </div>
       </div>
       <!-- ask customize  -->
-      <Customize v-model:isCustomizeTrue="isCustomizeTrue" />
+      <Customize
+        v-model:is-customize-true="isCustomizeTrue"
+        v-model:dynamic-hash="dynamicHash"
+        v-model:dynamic-url="dynamicUrl"
+      />
       <!-- successful minik -->
       <SuccessfulRecord :successful-save="successfulSave" />
 
