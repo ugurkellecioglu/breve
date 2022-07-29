@@ -50,9 +50,10 @@ const copyToClipboard = (url: string) => {
   document.execCommand("copy")
   document.body.removeChild(el)
 }
-const copy = (historicalUrl: IData) => {
+const copy = (historicalUrl: IData, index: number) => {
   copyToClipboard(historicalUrl.breveUrl)
-  const btn = copyBtns.value[historicalUrl.hash]
+
+  const btn = copyBtns.value[index]
   btn.classList.add("success")
   btn.innerText = "Copied!"
   setTimeout(() => {
@@ -90,10 +91,18 @@ const saveDynamically = async (url: string) => {
   }
   save(newUrlData)
 }
+const successfulSave = reactive({
+  data: {
+    givenUrl: "",
+    hash: "",
+    breveUrl: "",
+  },
+})
 const save = async (data: IData) => {
   loading.value = true
   SaveUrl(data)
     .then((response: any) => {
+      successfulSave.data = response
       historicalUrls.data = [{ ...response }, ...historicalUrls.data]
     })
     .catch((err: any) => {
@@ -185,6 +194,51 @@ const error = ref<string>("")
           >
         </div>
       </div>
+      <!-- successfull minik -->
+
+      <div class="row flex mt-2">
+        <div class="col-12">
+          <div
+            class="success-message card border-radius-1"
+            v-if="successfulSave.data.hash.length > 0"
+          >
+            <div class="mt-2 ml-2">
+              <h3>Success!</h3>
+            </div>
+            <div
+              class="row flex justify-content-center justify-content-start-sm align-items-center p-2 pt-0"
+            >
+              <div class="col-lg-4 col-md-12 flex justify-content-start">
+                <p>{{ successfulSave.data.givenUrl }}</p>
+              </div>
+              <div class="col-lg-2"></div>
+              <div class="col-lg-6 col-md-12 col-12 mt-2 mt-sm-0">
+                <div class="row flex align-items-center">
+                  <div class="col-lg-8 col-md-12 col-12">
+                    <p class="text-right text-left-sm mr-lg-4">
+                      <a
+                        class="link"
+                        :href="successfulSave.data.breveUrl"
+                        target="_blank"
+                        >{{ successfulSave.data.breveUrl }}</a
+                      >
+                    </p>
+                  </div>
+                  <div class="col-lg-4 col-md-12 col-12">
+                    <button
+                      v-on:click="() => copy(successfulSave.data, 0)"
+                      class="light text-dark block create-button copy-btn"
+                      :ref="(el, i) => (copyBtns[0] = el)"
+                    >
+                      Copy
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <!-- History -->
       <div class="row flex justify-content-center">
@@ -198,7 +252,7 @@ const error = ref<string>("")
             You don't have any previous minik's
           </small>
           <div
-            v-for="historicalUrl in historicalUrls.data"
+            v-for="(historicalUrl, idx) in historicalUrls.data"
             :key="historicalUrl.hash"
           >
             <div
@@ -222,9 +276,9 @@ const error = ref<string>("")
                   </div>
                   <div class="col-lg-4 col-md-12 col-12">
                     <button
-                      v-on:click="() => copy(historicalUrl)"
+                      v-on:click="() => copy(historicalUrl, idx + 1)"
                       class="light text-dark block create-button copy-btn"
-                      :ref="(el) => (copyBtns[historicalUrl.hash] = el)"
+                      :ref="(el) => (copyBtns[idx + 1] = el)"
                     >
                       Copy
                     </button>
