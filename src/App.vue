@@ -5,6 +5,7 @@ import { GetRandomQuote } from "./services/QuoteService.js"
 import Record from "./components/Record.vue"
 import Quote from "./components/Quote.vue"
 import Footer from "./components/Footer.vue"
+import RecordList from "./components/RecordList.vue"
 interface IData {
   givenUrl: string
   hash: string
@@ -179,29 +180,11 @@ const error = ref<string>("")
         </div>
       </div>
 
-      <!-- History -->
-      <div class="row flex justify-content-center">
-        <div class="error" v-if="error">
-          {{ error }}
-        </div>
-        <div class="card col-12 mt-3 border-radius-1 p-2">
-          <!-- get from local storage -->
-          <h3 class="p-2">Previous Miniks</h3>
-          <small class="p-2" v-if="historicalUrls.data.length === 0">
-            You don't have any previous minik's
-          </small>
-          <div
-            v-for="(historicalUrl, idx) in historicalUrls.data"
-            :key="historicalUrl.hash"
-          >
-            <Record :historicalUrl="historicalUrl" :index="idx" />
-            <hr />
-          </div>
-        </div>
-      </div>
-
+      <!-- old records -->
+      <RecordList :historicalUrls="historicalUrls" :error="error" />
+      <!-- random quote -->
       <Quote />
-
+      <!-- footer -->
       <Footer />
     </div>
   </div>
