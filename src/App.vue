@@ -2,6 +2,7 @@
 import { computed, onMounted, reactive, Ref, ref, watch } from "vue"
 import { SaveUrl } from "./services/UrlService.js"
 import { GetRandomQuote } from "./services/QuoteService.js"
+import Record from "./components/Record.vue"
 interface IData {
   givenUrl: string
   hash: string
@@ -40,29 +41,6 @@ onMounted(async () => {
     ...JSON.parse(localStorage.getItem("historicalUrls") || "[]"),
   ]
 })
-
-// copy
-const copyToClipboard = (url: string) => {
-  const el = document.createElement("textarea")
-  el.value = url
-  document.body.appendChild(el)
-  el.select()
-  document.execCommand("copy")
-  document.body.removeChild(el)
-}
-const copy = (historicalUrl: IData, index: number) => {
-  copyToClipboard(historicalUrl.breveUrl)
-
-  const btn = copyBtns.value[index]
-  btn.classList.add("success")
-  btn.innerText = "Copied!"
-  setTimeout(() => {
-    btn.classList.remove("success")
-    btn.innerText = "Copy"
-  }, 2000)
-}
-const copyBtns = ref<any>({})
-// copy end
 
 // customize
 const isCustomizeTrue = ref<boolean>(false)
@@ -205,37 +183,7 @@ const error = ref<string>("")
             <div class="mt-2 ml-2">
               <h3>Success!</h3>
             </div>
-            <div
-              class="row flex justify-content-center justify-content-start-sm align-items-center p-2 pt-0"
-            >
-              <div class="col-lg-4 col-md-12 flex justify-content-start">
-                <p>{{ successfulSave.data.givenUrl }}</p>
-              </div>
-              <div class="col-lg-2"></div>
-              <div class="col-lg-6 col-md-12 col-12 mt-2 mt-sm-0">
-                <div class="row flex align-items-center">
-                  <div class="col-lg-8 col-md-12 col-12">
-                    <p class="text-right text-left-sm mr-lg-4">
-                      <a
-                        class="link"
-                        :href="successfulSave.data.breveUrl"
-                        target="_blank"
-                        >{{ successfulSave.data.breveUrl }}</a
-                      >
-                    </p>
-                  </div>
-                  <div class="col-lg-4 col-md-12 col-12">
-                    <button
-                      v-on:click="() => copy(successfulSave.data, 0)"
-                      class="light text-dark block create-button copy-btn"
-                      :ref="(el, i) => (copyBtns[0] = el)"
-                    >
-                      Copy
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <Record :historicalUrl="successfulSave.data" :index="0" />
           </div>
         </div>
       </div>
@@ -255,37 +203,7 @@ const error = ref<string>("")
             v-for="(historicalUrl, idx) in historicalUrls.data"
             :key="historicalUrl.hash"
           >
-            <div
-              class="row flex justify-content-center justify-content-start-sm align-items-center p-2"
-            >
-              <div class="col-lg-4 col-md-12 flex justify-content-start">
-                <p>{{ historicalUrl.givenUrl }}</p>
-              </div>
-              <div class="col-lg-2"></div>
-              <div class="col-lg-6 col-md-12 col-12 mt-2 mt-sm-0">
-                <div class="row flex align-items-center">
-                  <div class="col-lg-8 col-md-12 col-12">
-                    <p class="text-right text-left-sm mr-lg-4">
-                      <a
-                        class="link"
-                        :href="historicalUrl.breveUrl"
-                        target="_blank"
-                        >{{ historicalUrl.breveUrl }}</a
-                      >
-                    </p>
-                  </div>
-                  <div class="col-lg-4 col-md-12 col-12">
-                    <button
-                      v-on:click="() => copy(historicalUrl, idx + 1)"
-                      class="light text-dark block create-button copy-btn"
-                      :ref="(el) => (copyBtns[idx + 1] = el)"
-                    >
-                      Copy
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <Record :historicalUrl="historicalUrl" :index="idx" />
             <hr />
           </div>
         </div>
@@ -364,23 +282,6 @@ input {
     background-color: #00bcd4 !important;
     color: #fff;
   }
-}
-
-.copy-btn {
-  border-radius: 0.6rem;
-  border: none;
-  font-size: 1rem;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
-  &:hover {
-    background-color: #e9e9e9;
-  }
-}
-
-.success {
-  background-color: #4caf50 !important;
-  color: #fff !important;
 }
 
 .blockquote {
