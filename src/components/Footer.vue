@@ -21,6 +21,7 @@
               <br />
               Made with ❤️ in Ankara, Turkey. This site is powered by<a
                 class="link"
+                target="_blank"
                 href="https://www.netlify.com"
               >
                 Netlify
