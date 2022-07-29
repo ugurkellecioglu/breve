@@ -6,6 +6,7 @@ import Record from "./components/Record.vue"
 import Quote from "./components/Quote.vue"
 import Footer from "./components/Footer.vue"
 import RecordList from "./components/RecordList.vue"
+import SuccessfulRecord from "./components/SuccessfulRecord.vue"
 interface IData {
   givenUrl: string
   hash: string
@@ -164,24 +165,11 @@ const error = ref<string>("")
           >
         </div>
       </div>
-      <!-- successfull minik -->
-
-      <div class="row flex mt-2">
-        <div class="col-12">
-          <div
-            class="success-message card border-radius-1"
-            v-if="successfulSave.data.hash.length > 0"
-          >
-            <div class="mt-2 ml-2">
-              <h3>Success!</h3>
-            </div>
-            <Record :historicalUrl="successfulSave.data" :index="0" />
-          </div>
-        </div>
-      </div>
+      <!-- successful minik -->
+      <SuccessfulRecord :successful-save="successfulSave" />
 
       <!-- old records -->
-      <RecordList :historicalUrls="historicalUrls" :error="error" />
+      <RecordList :historical-urls="historicalUrls" :error="error" />
       <!-- random quote -->
       <Quote />
       <!-- footer -->
