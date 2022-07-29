@@ -30,8 +30,6 @@
 // https://vuejs.org/guide/components/events.html#usage-with-v-model
 defineProps<{
   isCustomizeTrue: boolean
-  dynamicHash: string | null
-  dynamicURL: string | null
 }>()
 defineEmits(["update:isCustomizeTrue"])
 </script>
