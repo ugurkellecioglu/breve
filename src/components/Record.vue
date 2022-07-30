@@ -10,9 +10,12 @@
       <div class="row flex align-items-center">
         <div class="col-lg-8 col-md-12 col-12">
           <p class="text-right text-left-sm mr-lg-4">
-            <a class="link" :href="historicalUrl.breveUrl" target="_blank">{{
-              historicalUrl.breveUrl
-            }}</a>
+            <a
+              class="link"
+              :href="`https://${historicalUrl.breveUrl}`"
+              target="_blank"
+              >{{ historicalUrl.breveUrl }}</a
+            >
           </p>
         </div>
         <div class="col-lg-4 col-md-12 col-12">
