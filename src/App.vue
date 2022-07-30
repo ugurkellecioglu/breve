@@ -34,7 +34,7 @@ const loading: Ref<boolean> = ref(false)
 const saveHash = async (url: string) => {
   const hash = generateHash()
   data.hash = hash
-  data.breveUrl = `${window.location.origin}/v/${hash}`
+  data.breveUrl = `${getHost.value}/v/${hash}`
   save(data)
 }
 
@@ -69,7 +69,7 @@ const saveDynamically = async (url: string) => {
   const newUrlData = {
     givenUrl: url,
     hash: newHash,
-    breveUrl: `${window.location.origin}/v/${newHash}`,
+    breveUrl: `${getHost.value}/v/${newHash}`,
   }
   save(newUrlData)
 }
@@ -79,6 +79,10 @@ const successfulSave = reactive({
     hash: "",
     breveUrl: "",
   },
+})
+const getHost = computed(() => {
+  const host = window.location.host
+  return host.startsWith("www.") ? host.substring(4) : host
 })
 const save = async (data: IData) => {
   loading.value = true
@@ -106,7 +110,6 @@ const error = ref<string>("")
   <div class="wrapper">
     <div class="container">
       <Hero />
-
       <!-- Minik section -->
       <ShortenUrl
         v-model:given-url="data.givenUrl"
